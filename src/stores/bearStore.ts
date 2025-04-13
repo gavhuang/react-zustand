@@ -1,34 +1,48 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import createCustomStore from "./customStore";
 
-type TBearStoreState = {
-  bears: number;
-  color: string;
-  size: string;
-  increasePopulation: () => void;
-  removeAllBears: () => void;
-};
+interface BearStoreState {
+  bearNumber: number;
+}
 
-export const useBearStore = create<TBearStoreState>()(
-  persist(
-    (set) => ({
-      bears: 0,
-      color: "red",
-      size: "big",
-      increasePopulation: () =>
-        set((state) => ({
-          bears: state.bears + 1,
-        })),
-      removeAllBears: () => set({ bears: 0 }),
-    }),
-    {
-      name: "bear store",
-      partialize: (state) =>
-        Object.fromEntries(
-          Object.entries(state).filter(
-            ([key]) => !["size", "color"].includes(key)
-          )
-        ),
-    }
-  )
+interface BearStoreActions {
+  actions : {
+    setBearNumber: (newBaseSerialNumber: number) => void;
+  }
+}
+
+const bearState: BearStoreState = {
+  bearNumber: 0,
+}
+
+export const useBearStore = createCustomStore<
+  BearStoreState,
+  BearStoreActions
+>(
+  bearState,
+  {
+    devtoolsOptions: {
+      name: "bear-store",
+      store: "Bear",
+    },
+    persistOptions: { name: "bearStore" },
+  },
+  (set) => ({
+    actions: {
+      setBearNumber: (bearNumber) =>
+        set((state) => {
+          state.bearNumber = bearNumber;
+        }),
+    },
+  }),
+
+  // This one works:
+  //  (set) => ({
+  //   setBaseSerialNumber: (newBaseSerialNumber) =>
+  //       set((state) => {
+  //         state.baseSerialNumber = newBaseSerialNumber;
+  //       }),
+  //   }),
 );
+
+export const useBearNumber = () => useBearStore(state => state.bearNumber);
+export const useBearActions = () => useBearStore(state => state.actions);

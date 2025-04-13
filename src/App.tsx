@@ -1,11 +1,11 @@
-import { CatBox } from "./components/CatBox";
+import { Bear } from "./components/Bear";
 
 function App() {
   return (
     <div className="container">
-      <h1>Zustand Tutorial</h1>
+      <h1>Bears</h1>
       <div>
-        <CatBox />
+        <Bear />
       </div>
     </div>
   );
