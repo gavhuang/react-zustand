@@ -3,6 +3,8 @@ import { useBearNumber, useBearActions } from '../stores/bearStore';
 export const Bear = () => {
   const bearNumber = useBearNumber();
   const { setBearNumber } = useBearActions();
+  console.log(bearNumber);
+  console.log(useBearActions())
 
   return (
     <div>
