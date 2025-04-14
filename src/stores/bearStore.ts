@@ -5,13 +5,13 @@ interface BearStoreState {
 }
 
 interface BearStoreActions {
-  // actions : {
+  actions : {
     setBearNumber: (newBaseSerialNumber: number) => void;
     resetBearNumber?: () => void;
-  // }
+  }
 }
 
-const bearState: BearStoreState = {
+const bearState: BearStoreState= {
   bearNumber: 0,
 }
 
@@ -25,17 +25,24 @@ export const useBearStore = createCustomStore<
       name: "bear-store",
       store: "Bear",
     },
-    persistOptions: { name: "bearStore" },
+    persistOptions: {
+      name: "bearStore",
+      partialize: (state) => ({ bearNumber: state.bearNumber }),
+    },
   },
   (set) => ({
-    // actions: {
+    actions: {
       setBearNumber: (bearNumber) =>
         set((state) => {
           state.bearNumber = bearNumber;
         }),
-    // },
+      resetBearNumber: () =>
+        set((state) => {
+          state.bearNumber = 0
+        }),
+    },
   }),
 );
 
 export const useBearNumber = () => useBearStore(state => state.bearNumber);
-export const useBearActions = () => useBearStore(state => state);
+export const useBearActions = () => useBearStore(state => state.actions);
