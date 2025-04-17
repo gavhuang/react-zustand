@@ -3,14 +3,14 @@ import { create, StateCreator } from "zustand";
 import { devtools, DevtoolsOptions, persist, PersistOptions } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 
-interface StoreOptions<T> {
+interface StoreOptions<T, PT> {
   devtoolsOptions?: DevtoolsOptions;
-  persistOptions: PersistOptions<T>;
+  persistOptions: PersistOptions<T, PT>;
 }
 
 const createCustomStore = <T extends object, U extends object>(
   state: T,
-  options: StoreOptions<T>,
+  options: StoreOptions<T & U, T>,
   actions: StateCreator<
     T,
     [
